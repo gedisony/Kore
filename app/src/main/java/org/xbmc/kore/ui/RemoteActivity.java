@@ -67,6 +67,7 @@ import org.xbmc.kore.utils.UIUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -368,16 +369,22 @@ public class RemoteActivity extends BaseActivity
             videoUri = Uri.parse(intent.getData().toString());
         }
 
-        final String videoId = getVideoId(videoUri);
+        //final String videoId = getVideoId(videoUri);
         String videoUrl;
-        if (videoId != null) {
-            videoUrl = "plugin://plugin.video." +
-                (videoUri.getHost().endsWith("vimeo.com") ? "vimeo" : "youtube") +
-                "/play/?video_id=" + videoId;
-
-        } else {
-            videoUrl = videoUri.toString();
+        try {
+            videoUrl = "plugin://script.reddit.reader/?mode=play&url=" + URLEncoder.encode(videoUri.toString(), "UTF-8");
+        }catch (java.io.UnsupportedEncodingException e) {
+            // Ignore for now...
+            return;
         }
+        //if (videoId != null) {
+        //    videoUrl = "plugin://plugin.video." +
+        //        (videoUri.getHost().endsWith("vimeo.com") ? "vimeo" : "youtube") +
+        //        "/play/?video_id=" + videoId;
+
+        //} else {
+        //videoUrl = videoUri.toString();
+        //}
 
         final String fvideoUrl = videoUrl;
 
